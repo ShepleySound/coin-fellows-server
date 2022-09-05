@@ -6,7 +6,7 @@
 
 [GitHub - CoinFellows (Main)](https://github.com/orgs/coinfellows/repositories)
 
-[GitHub - CoinFellows (App)](https://github.com/coinfellows/client)
+[GitHub - CoinFellows (Client)](https://github.com/coinfellows/client)
 
 [GitHub - CoinFellows (Server)](https://github.com/coinfellows/server)
 
