@@ -1,6 +1,6 @@
-# server# Project Prep - Coin Fellows
+# Coin Fellows Server
 
-**Author**: Junyoung Son, Brandon Pitts, Luis Rosales, Robert Shepley
+**Authors**: Junyoung Son, Brandon Pitts, Luis Rosales, Robert Shepley
 
 **Version**: 0.1.0
 
@@ -14,7 +14,7 @@
 
 ## Overview
 
-This project we are building a CRUD app that works with Crypto currencies and will display coin cost in USD/Satoshis and some historical data.
+A CRUD application that allows users to view cryptocurrencies, including historical and current data. Users will have watchlists associated with their account that will allow for tracking any available coins.
 
 ## Getting Started
 
