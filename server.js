@@ -12,6 +12,7 @@ const getMarketData = require('./modules/market-data')
 
 // Bring in the User model
 const User = require('./models/user.js');
+const { findById } = require('./models/user.js');
 
 // Connect Mongoose to MongoDB
 mongoose.connect(process.env.MONGODB_CONNECTION);
@@ -34,21 +35,49 @@ app.get('/', (req, res) => {
 
 
 app.get('/user', jwtCheck, getUser)
-
+app.delete('/user', jwtCheck, deleteFromWatchlist)
+app.post('/user', jwtCheck, addToWatchList)
 async function getUser(req, res, next) {
   try {
-  await User.updateOne(
-    { _id: req.auth.sub },
-    { $setOnInsert: { _id: req.auth.sub, watchlist: ['bitcoin'] }},
-    { upsert: true, new: true }
-  )
+    // Adds user to the database if not found. Returns the user.
+    const user = await User.findOneAndUpdate(
+      { _id: req.auth.sub },
+      { $setOnInsert: { watchlist: [{_id: 'bitcoin', name: 'bitcoin'}, {_id: 'ethereum', name: 'ethereum'}] }},
+      { upsert: true, new: true }
+    )
+    res.status(200).send(user);
   } catch (error) {
     next(error);
   }
 }
 
+async function deleteFromWatchlist(req, res, next) {
+  try {
+    const user = await User.findById(req.auth.sub).exec();
+    await user.watchlist.id(req.body.coinId).remove();
+    user.save();
+    res.status(201).send("deleted")
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function addToWatchList(req, res, next) {
+  try {
+    const user = await User.findById(req.auth.sub).exec();
+    await user.watchlist.push({ _id: req.body.coinId, name: req.body.coinId });
+    user.save();
+    res.status(200).send("added")
+  } catch (error) {
+    next(error);
+  }
+}
+
+app.get('/userdata')
+
 // Watchlist endpoint
 app.get('/watchlist', jwtCheck, getWatchlist)
+
 
 // Market endpoint
 app.get('/market', jwtCheck, getMarketData)
