@@ -7,10 +7,11 @@ const { expressjwt: jwt } = require('express-jwt');
 const jwtCheck = require('./middleware/jwt-check');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const getWatchlist = require('./modules/watchlist')
+const getMarketData = require('./modules/market-data')
 
 // Bring in the User model
 const User = require('./models/user.js');
-let currentUserSub = null;
 
 // Connect Mongoose to MongoDB
 mongoose.connect(process.env.MONGODB_CONNECTION);
@@ -31,57 +32,32 @@ app.get('/', (req, res) => {
   res.send('Hello Coin Fellows')
 })
 
-app.get('/user', jwtCheck, getUser)
 
+app.get('/user', jwtCheck, getUser)
+// Maybe make this a different route? /:id
 async function getUser(req, res, next) {
   try {
-  const userDoc = await User.findOneAndUpdate(
+  await User.updateOne(
     { _id: req.auth.sub },
     { watchlist: ['bitcoin'] },
     { upsert: true, new: true }
   )
   currentUserSub = req.auth.sub;
-  res.status(200).send(userDoc)
   } catch (error) {
     next(error);
   }
 }
 
-app.get('/market', getMarketData)
+// Watchlist endpoint
+app.get('/watchlist', jwtCheck, getWatchlist)
 
-async function getMarketData(req, res, next) {
-  try {
-  const baseUrl = 'https://api.coingecko.com/api/v3/coins/markets'
+// Market endpoint
+app.get('/market', jwtCheck, getMarketData)
 
-  const params = {
-    vs_currency: 'USD',
-    per_page: 20,
-  }
-  const apiResponse = await axios.get(baseUrl, { params });
-  const marketData = apiResponse.data;
-  const user = await User.findById(currentUserSub, 'watchlist').exec();
-  const returnedData = marketData.map(element => {
-    return new CoinMarketData(element, (user.watchlist.some(coin => coin === element.id)))
-  }
-  )
-  res.status(200).send(returnedData);
-  } catch (error) {
-    next(error);
-  }
-}
+app.use((err, req, res, next) => {
+  console.log(err.message);
+  res.status(500).send(err.message)
+})
 
-class CoinMarketData {
-  constructor(marketObj, isFavorited) {
-    this.id = marketObj.id;
-    this.name = marketObj.name;
-    this.symbol = marketObj.symbol;
-    this.image = marketObj.image;
-    this.rank = marketObj.market_cap_rank;
-    this.percentage_change_24h = marketObj.price_change_percentage_24h;
-    this.marketCap = marketObj.market_cap;
-    this.current_price = marketObj.current_price;
-    this.isFavorited = isFavorited;
-  }
-}
 
 app.listen(port);
