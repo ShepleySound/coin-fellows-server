@@ -39,10 +39,9 @@ async function getUser(req, res, next) {
   try {
   await User.updateOne(
     { _id: req.auth.sub },
-    { watchlist: ['bitcoin'] },
+    { $setOnInsert: { _id: req.auth.sub, watchlist: ['bitcoin'] }},
     { upsert: true, new: true }
   )
-  currentUserSub = req.auth.sub;
   } catch (error) {
     next(error);
   }

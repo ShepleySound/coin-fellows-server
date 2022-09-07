@@ -6,7 +6,7 @@ const User = require('../models/user.js');
 // Retrieve market data from coingecko API and sprinkle with user data.
 async function getMarketData(req, res, next) {
   try {
-  const currentUserSub = req.auth.sub;
+  const currentUserSub = await req.auth.sub;
   const baseUrl = 'https://api.coingecko.com/api/v3/coins/markets'
 
   const params = {
