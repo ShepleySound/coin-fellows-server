@@ -6,7 +6,6 @@ const watchItemSchema = new Schema({
   _id: {type: String, required: true},
   name : {type: String, required: true}
 })
-
 const ownedItemSchema = new Schema({
   _id: {type: String, required: true},
   name: {type: String, required: true},
