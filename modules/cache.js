@@ -28,7 +28,7 @@ class Cache {
   }
 
   isExpired(key) {
-    return (Date.now() - this.cache[key].timeStamp) > 3.6e+6 ? true : false;
+    return (Date.now() - this.cache[key].timeStamp) > 30000 ? true : false;
   }
 }
 

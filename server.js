@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
 
 
 app.get('/user', jwtCheck, getUser)
-// Maybe make this a different route? /:id
+
 async function getUser(req, res, next) {
   try {
   await User.updateOne(
