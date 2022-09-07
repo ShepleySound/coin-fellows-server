@@ -1,11 +1,14 @@
 'use strict';
 
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors')
 const { expressjwt: jwt } = require('express-jwt');
 const jwtCheck = require('./middleware/jwt-check');
 require('dotenv').config();
 const mongoose = require('mongoose');
+const getWatchlist = require('./modules/watchlist')
+const getMarketData = require('./modules/market-data')
 
 // Bring in the User model
 const User = require('./models/user.js');
@@ -29,26 +32,31 @@ app.get('/', (req, res) => {
   res.send('Hello Coin Fellows')
 })
 
-app.get('/protected', jwtCheck, getUser)
+
+app.get('/user', jwtCheck, getUser)
 
 async function getUser(req, res, next) {
   try {
-  console.log('REQ', req.auth.sub)
-  const userDoc = await User.findOneAndUpdate(
+  await User.updateOne(
     { _id: req.auth.sub },
-    { name: req.auth.sub },
+    { $setOnInsert: { _id: req.auth.sub, watchlist: ['bitcoin'] }},
     { upsert: true, new: true }
   )
-  res.status(200).send(userDoc)
   } catch (error) {
     next(error);
   }
 }
 
-app.get('/authorized', (req, res) => {
-  res.send('Secured Resource');
+// Watchlist endpoint
+app.get('/watchlist', jwtCheck, getWatchlist)
+
+// Market endpoint
+app.get('/market', jwtCheck, getMarketData)
+
+app.use((err, req, res, next) => {
+  console.log(err.message);
+  res.status(500).send(err.message)
 })
 
-app.get('')
 
 app.listen(port);
