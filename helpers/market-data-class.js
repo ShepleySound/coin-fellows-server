@@ -8,7 +8,6 @@ class CoinMarketData {
     this.percentage_change_24h = marketObj.price_change_percentage_24h;
     this.marketCap = marketObj.market_cap;
     this.current_price = marketObj.current_price;
-    this.isFavorited = isFavorited;
   }
 }
 
