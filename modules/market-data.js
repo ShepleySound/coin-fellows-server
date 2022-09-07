@@ -1,6 +1,7 @@
 const axios = require('axios');
 const cache = require('./cache.js').cache;
 const CoinMarketData = require('../helpers/market-data-class')
+const User = require('../models/user.js');
 
 // Retrieve market data from coingecko API and sprinkle with user data.
 async function getMarketData(req, res, next) {
