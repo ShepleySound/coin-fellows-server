@@ -2,7 +2,7 @@
 
 **Authors**: Junyoung Son, Brandon Pitts, Luis Rosales, Robert Shepley
 
-**Version**: 0.1.0
+**Version**: 0.2.0
 
 [GitHub - CoinFellows (Main)](https://github.com/orgs/coinfellows/repositories)
 
@@ -18,13 +18,13 @@ A CRUD application that allows users to view cryptocurrencies, including histori
 
 ## Getting Started
 
-Team Github Repository created - <s>Windows Extreme</s> Coin Fellows, 
+Team Github Repository created - ~~Windows Extreme~~ Coin Fellows,
 
 Miro - Team WRRC board created,
 
 ## Architecture
 
-React, Mongoose, MongoDB, Axios, Express, Node.js, Material.ui, 0Auth, 
+React, Mongoose, MongoDB, Axios, Express, Node.js, Material.ui, 0Auth,
 
 ## Change Log
 
@@ -69,6 +69,45 @@ Estimate of time needed to complete: 3 hours
 Start time: 10:00am
 
 Finish time: 3:30pm
+
+Actual time needed to complete:
+
+---
+
+09/06/2022
+Name of feature: Coin Fellows
+
+Estimate of time needed to complete: 8 hours
+
+Start time: 9:00am
+
+Finish time: 10:00pm
+
+Actual time needed to complete:
+
+---
+
+09/07/2022
+Name of feature: Coin Fellows
+
+Estimate of time needed to complete: 8 hours
+
+Start time: 9:30am
+
+Finish time: 6:30pm
+
+Actual time needed to complete:
+
+---
+
+09/08/2022
+Name of feature: Coin Fellows
+
+Estimate of time needed to complete: 8 hours
+
+Start time: 9:30am
+
+Finish time: 6:30pm
 
 Actual time needed to complete:
 
