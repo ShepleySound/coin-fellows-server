@@ -98,7 +98,7 @@ async function populateCoin(req, res, next) {
       developer_data: false,
     }
   }
-  const ohlcRequest = {
+  const chartRequest = {
     params: {
       id: coinid,
       vs_currency: 'usd',
@@ -108,8 +108,8 @@ async function populateCoin(req, res, next) {
   try {
     const coinResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}`, coinRequest);
     console.log(coinResponse)
-    const ohlcResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}/ohlc`, ohlcRequest);
-    const returnedData = new SingleCoinData(coinResponse.data, ohlcResponse.data);
+    const chartResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}/market_chart`, chartRequest);
+    const returnedData = new SingleCoinData(coinResponse.data, chartResponse.data);
     res.status(200).send(returnedData)
   } catch (error) {
     next(error)

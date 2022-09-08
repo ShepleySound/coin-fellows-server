@@ -1,5 +1,5 @@
 class SingleCoinData {
-  constructor(marketObj, ohlc) {
+  constructor(marketObj, chart) {
     this.id = marketObj.id;
     this.symbol = marketObj.symbol;
     this.name = marketObj.name;
@@ -13,7 +13,12 @@ class SingleCoinData {
     this.price_change_24h = marketObj.market_data.price_change_percentage_24h_in_currency.usd;
     this.circulating_supply = marketObj.market_data.circulating_supply;
     this.max_supply = marketObj.market_data.max_supply;
-    this.ohlc = ohlc;
+    this.chart = chart.prices.map(item => {
+      return {
+        date: new Date(item[0]),
+        price: item[1],
+      }
+    })
   }
 }
 
