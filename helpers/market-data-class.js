@@ -1,5 +1,5 @@
 class CoinMarketData {
-  constructor(marketObj, isFavorited) {
+  constructor(marketObj) {
     this.id = marketObj.id;
     this.name = marketObj.name;
     this.symbol = marketObj.symbol;

@@ -7,8 +7,9 @@ const { expressjwt: jwt } = require('express-jwt');
 const jwtCheck = require('./middleware/jwt-check');
 require('dotenv').config();
 const mongoose = require('mongoose');
-const getWatchlist = require('./modules/watchlist')
-const getMarketData = require('./modules/market-data')
+const getWatchlist = require('./modules/watchlist');
+const getMarketData = require('./modules/market-data');
+const SingleCoinData = require('./helpers/coin-data-class.js');
 
 // Bring in the User model
 const User = require('./models/user.js');
@@ -54,7 +55,7 @@ async function getUser(req, res, next) {
 async function deleteFromWatchlist(req, res, next) {
   try {
     const user = await User.findById(req.auth.sub).exec();
-    await user.watchlist.id(req.body.coinId).remove();
+    await user?.watchlist.id(req.body.coinId).remove();
     user.save();
     res.status(201).send("deleted")
   } catch (error) {
@@ -65,7 +66,7 @@ async function deleteFromWatchlist(req, res, next) {
 async function addToWatchList(req, res, next) {
   try {
     const user = await User.findById(req.auth.sub).exec();
-    await user.watchlist.push({ _id: req.body.coinId, name: req.body.coinId });
+    await user?.watchlist.push({ _id: req.body.coinId, name: req.body.coinId });
     user.save();
     res.status(200).send("added")
   } catch (error) {
@@ -74,6 +75,46 @@ async function addToWatchList(req, res, next) {
 }
 
 app.get('/userdata')
+app.get('/coins', coinRoot)
+app.get('/coins/:coinid', populateCoin)
+
+async function coinRoot(req, res, next) {
+  try {
+    res.status(200).send("hello")
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function populateCoin(req, res, next) {
+  console.log(req.params.coinid)
+  const coinid = req.params.coinid;
+  const coinRequest = {
+    params: {
+      id: coinid,
+      localization: false,
+      tickers: false,
+      community_data: false,
+      developer_data: false,
+    }
+  }
+  const chartRequest = {
+    params: {
+      id: coinid,
+      vs_currency: 'usd',
+      days: 30,
+    }
+  }
+  try {
+    const coinResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}`, coinRequest);
+    console.log(coinResponse)
+    const chartResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}/market_chart`, chartRequest);
+    const returnedData = new SingleCoinData(coinResponse.data, chartResponse.data);
+    res.status(200).send(returnedData)
+  } catch (error) {
+    next(error)
+  }
+}
 
 // Watchlist endpoint
 app.get('/watchlist', jwtCheck, getWatchlist)
@@ -81,6 +122,10 @@ app.get('/watchlist', jwtCheck, getWatchlist)
 
 // Market endpoint
 app.get('/market', jwtCheck, getMarketData)
+
+app.get('*', (req, res) => {
+  res.status(404).send('Page not available.');
+});
 
 app.use((err, req, res, next) => {
   console.log(err.message);
