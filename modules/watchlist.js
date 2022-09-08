@@ -7,7 +7,7 @@ async function getWatchlist(req, res, next) {
   try {
     const currentUserSub = await req.auth.sub;
     const user = await User.findById(currentUserSub, 'watchlist').exec();
-    const watchlist = user.watchlist;
+    const watchlist = user?.watchlist;
     const baseUrl = 'https://api.coingecko.com/api/v3/coins/markets'
     const watchlistString = watchlist.map(item => {
       return item._id;
