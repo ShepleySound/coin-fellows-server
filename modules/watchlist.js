@@ -3,7 +3,6 @@ const cache = require('./cache.js').cache;
 const CoinMarketData = require('../helpers/market-data-class')
 const User = require('../models/user.js');
 
-
 async function getWatchlist(req, res, next) {
   try {
     const currentUserSub = await req.auth.sub;

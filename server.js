@@ -9,6 +9,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const getWatchlist = require('./modules/watchlist');
 const getMarketData = require('./modules/market-data');
+const CoinMarketData = require('./helpers/market-data-class.js');
 const SingleCoinData = require('./helpers/coin-data-class.js');
 
 // Bring in the User model
@@ -87,7 +88,6 @@ async function coinRoot(req, res, next) {
 }
 
 async function populateCoin(req, res, next) {
-  console.log(req.params.coinid)
   const coinid = req.params.coinid;
   const coinRequest = {
     params: {
@@ -107,10 +107,44 @@ async function populateCoin(req, res, next) {
   }
   try {
     const coinResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}`, coinRequest);
-    console.log(coinResponse)
     const chartResponse = await axios.get(`https://api.coingecko.com/api/v3/coins/${coinid}/market_chart`, chartRequest);
     const returnedData = new SingleCoinData(coinResponse.data, chartResponse.data);
     res.status(200).send(returnedData)
+  } catch (error) {
+    next(error)
+  }
+}
+
+app.get('/search', getSearch)
+
+async function getSearch(req, res, next) {
+  try {
+    const searchRequest = {
+      params: {
+        query: req.query.search
+      }
+    }
+    const searchResponse = await axios.get('https://api.coingecko.com/api/v3/search', searchRequest)
+    const searchListString = searchResponse.data.coins.map(item => {
+      return item.id
+    }).join(',')
+    const baseUrl = 'https://api.coingecko.com/api/v3/coins/markets'
+
+    const params = {
+      per_page: 0,
+      vs_currency: 'USD',
+      ids: searchListString
+    }
+    const apiResponse = await axios.get(baseUrl, { params });
+    // Use data property from response.
+    const searchlistData = apiResponse.data;
+    const returnedData = searchlistData.map(element => {
+      return new CoinMarketData(element);
+    })
+    res.status(200).send(returnedData);
+
+    // Return data to client
+  
   } catch (error) {
     next(error)
   }
