@@ -102,7 +102,7 @@ async function populateCoin(req, res, next) {
     params: {
       id: coinid,
       vs_currency: 'usd',
-      days: 30,
+      days: req.query.days,
     }
   }
   try {

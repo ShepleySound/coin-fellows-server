@@ -6,13 +6,16 @@ class SingleCoinData {
     this.description = marketObj.description;
     this.images = marketObj.image;
     this.genesis_date = marketObj.genesis_date;
-    this.current_price = marketObj.current_price;
     this.ath = marketObj.market_data.ath.usd;
     this.market_cap = marketObj.market_data.market_cap.usd;
     this.total_volume = marketObj.market_data.total_volume.usd;
     this.price_change_24h = marketObj.market_data.price_change_percentage_24h_in_currency.usd;
+    this.price_change_7d = marketObj.market_data.price_change_percentage_7d_in_currency.usd;
+    this.price_change_30d = marketObj.market_data.price_change_percentage_30d_in_currency.usd;
     this.circulating_supply = marketObj.market_data.circulating_supply;
     this.max_supply = marketObj.market_data.max_supply;
+    this.rank = marketObj.market_data.market_cap_rank;
+    this.current_price = marketObj.market_data.current_price.usd;
     this.chart = chart.prices.map(item => {
       return {
         date: new Date(item[0]),
