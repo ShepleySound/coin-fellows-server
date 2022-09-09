@@ -56,8 +56,8 @@ async function getUser(req, res, next) {
 async function deleteFromWatchlist(req, res, next) {
   try {
     const user = await User.findById(req.auth.sub).exec();
-    await user?.watchlist.id(req.body.coinId).remove();
-    user.save();
+    await user.watchlist.id(req.body.coinId).remove();
+    await user.save();
     res.status(201).send("deleted")
   } catch (error) {
     next(error);
@@ -68,7 +68,7 @@ async function addToWatchList(req, res, next) {
   try {
     const user = await User.findById(req.auth.sub).exec();
     await user?.watchlist.push({ _id: req.body.coinId, name: req.body.coinId });
-    user.save();
+    await user.save();
     res.status(200).send("added")
   } catch (error) {
     next(error);
@@ -153,9 +153,8 @@ async function getSearch(req, res, next) {
 // Watchlist endpoint
 app.get('/watchlist', jwtCheck, getWatchlist)
 
-
 // Market endpoint
-app.get('/market', jwtCheck, getMarketData)
+app.get('/market', getMarketData)
 
 app.get('*', (req, res) => {
   res.status(404).send('Page not available.');

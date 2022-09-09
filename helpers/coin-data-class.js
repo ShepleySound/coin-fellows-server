@@ -18,7 +18,7 @@ class SingleCoinData {
     this.current_price = marketObj.market_data.current_price.usd;
     this.chart = chart.prices.map(item => {
       return {
-        date: new Date(item[0]),
+        date: item[0],
         price: item[1],
       }
     })
