@@ -10,7 +10,7 @@ async function getMarketData(req, res, next) {
 
     const params = {
       vs_currency: 'USD',
-      per_page: 20,
+      per_page: 50,
     }
 
     const key = 'fullMarketSearch';
