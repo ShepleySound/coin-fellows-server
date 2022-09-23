@@ -32,7 +32,7 @@ A full-stack CRUD application built using React, NodeJS, Express, and MongoDB. A
 
 Thanks to the original team for helping to design and build out the UI for this application!
 
-### [Robert Shepley (:wave:)](https://github.com/ShepleySound)
+### [Robert Shepley :wave:](https://github.com/ShepleySound)
 
 ### [Junyoung Son](https://github.com/Junyoungson808)
 
